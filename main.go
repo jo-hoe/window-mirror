@@ -39,14 +39,14 @@ func main() {
 	}
 	defer procCoUninitialize.Call()
 
-	// Detect all windows
-	windows := detectWindows()
+	// Detect all visible windows
+	windows := detectVisibleWindows()
 
 	// Mirror windows
 	mirrorWindows(windows)
 }
 
-func detectWindows() []WindowInfo {
+func detectVisibleWindows() []WindowInfo {
 	var windowList []WindowInfo
 
 	// Load user32.dll
@@ -54,12 +54,16 @@ func detectWindows() []WindowInfo {
 	enumWindows := user32.MustFindProc("EnumWindows")
 	getWindowTextW := user32.MustFindProc("GetWindowTextW")
 	getWindowTextLengthW := user32.MustFindProc("GetWindowTextLengthW")
+	isWindowVisible := user32.MustFindProc("IsWindowVisible")
+	isIconic := user32.MustFindProc("IsIconic")
 
 	// Callback function to enumerate windows
 	callback := syscall.NewCallback(func(hwnd syscall.Handle, lparam uintptr) uintptr {
-		// Check if window is visible
-		isVisible, _, _ := syscall.Syscall(user32.MustFindProc("IsWindowVisible").Addr(), 1, uintptr(hwnd), 0, 0)
-		if isVisible == 0 {
+		// Check if window is visible and not minimized
+		visibleRet, _, _ := isWindowVisible.Call(uintptr(hwnd))
+		iconicRet, _, _ := isIconic.Call(uintptr(hwnd))
+		
+		if visibleRet == 0 || iconicRet != 0 {
 			return 1 // continue enumeration
 		}
 
@@ -79,12 +83,15 @@ func detectWindows() []WindowInfo {
 			var rect win.RECT
 			win.GetWindowRect(win.HWND(hwnd), &rect)
 
-			windowList = append(windowList, WindowInfo{
-				Handle:       hwnd,
-				Title:        syscall.UTF16ToString(buffer),
-				OriginalRect: rect,
-				ScreenIndex:  0, // Placeholder, implement screen detection
-			})
+			// Additional check to ensure window is on screen and not zero-sized
+			if rect.Right > rect.Left && rect.Bottom > rect.Top {
+				windowList = append(windowList, WindowInfo{
+					Handle:       hwnd,
+					Title:        syscall.UTF16ToString(buffer),
+					OriginalRect: rect,
+					ScreenIndex:  0, // Placeholder, implement screen detection
+				})
+			}
 		}
 
 		return 1
