@@ -43,27 +43,20 @@ func main() {
 	})
 
 	// Mirror windows on their respective monitors
-	mirrorWindows(windows)
+	mirrorWindows(user32Api, windows)
 }
 
-func mirrorWindows(windows []app.WindowInfo) {
-	// Load user32.dll
-	user32 := syscall.MustLoadDLL("user32.dll")
-	moveWindow := user32.MustFindProc("MoveWindow")
-
+func mirrorWindows(user32Api app.User32API, windows []app.WindowInfo) {
 	for _, window := range windows {
 		// Calculate new position within the monitor's work area
 		newRect := calculateMirroredPosition(window)
 
 		// Move window
-		moveWindow.Call(
-			uintptr(window.Handle),
-			uintptr(newRect.Left),
-			uintptr(newRect.Top),
-			uintptr(newRect.Right-newRect.Left),
-			uintptr(newRect.Bottom-newRect.Top),
-			uintptr(1), // redraw flag
-		)
+		user32Api.MoveWindows(window, 
+			newRect.Left, 
+			newRect.Top, 
+			newRect.Right-newRect.Left, 
+			newRect.Bottom-newRect.Top)
 	}
 }
 

@@ -78,6 +78,9 @@ func (m *MockUser32API) GetWindowRectangle(windowHandle syscall.Handle) win.RECT
 	return win.RECT{}
 }
 
+func (m *MockUser32API) MoveWindows(window WindowInfo, top int32, left int32, right int32, bottom int32) {
+}
+
 func TestIsWindowVisible(t *testing.T) {
 	// Mock setup
 	mockAPI := &MockUser32API{visibleReturn: true}

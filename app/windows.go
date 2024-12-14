@@ -22,6 +22,7 @@ type User32API interface {
 	GetAllWindows() []WindowInfo
 	GetWindowTitle(windowHandle syscall.Handle) string
 	GetWindowRectangle(windowHandle syscall.Handle) win.RECT
+	MoveWindows(window WindowInfo, top int32, left int32, right int32, bottom int32)
 }
 
 // User32DLL implements the User32API interface using user32.dll.
@@ -31,6 +32,7 @@ type User32DLL struct {
 	enumWindows          *syscall.Proc
 	getWindowTitle       *syscall.Proc
 	getWindowTitleLength *syscall.Proc
+	moveWindow           *syscall.Proc
 }
 
 var (
@@ -48,6 +50,7 @@ func GetUser32Instance() User32API {
 			enumWindows:          dll.MustFindProc("EnumWindows"),
 			getWindowTitle:       dll.MustFindProc("GetWindowTextW"),
 			getWindowTitleLength: dll.MustFindProc("GetWindowTextLengthW"),
+			moveWindow:           dll.MustFindProc("MoveWindow"),
 		}
 	})
 	return user32Instance
@@ -123,4 +126,16 @@ func getMonitorInfo(windowHandle syscall.Handle) win.MONITORINFO {
 
 	// Return an empty/zero MONITORINFO if retrieval fails
 	return win.MONITORINFO{}
+}
+
+func (u *User32DLL) MoveWindows(window WindowInfo, top int32, left int32, right int32, bottom int32) {
+	// Move window
+	u.moveWindow.Call(
+		uintptr(window.Handle),
+		uintptr(left),
+		uintptr(top),
+		uintptr(right),
+		uintptr(bottom),
+		uintptr(1), // redraw flag
+	)
 }
