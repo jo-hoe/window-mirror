@@ -35,11 +35,17 @@ func main() {
 	user32Api := app.GetUser32Instance()
 	windows := user32Api.GetAllWindows()
 
+	// remove windows without title
 	windows = app.ParallelWindowFilter(windows, func(window app.WindowInfo) bool {
-		return app.IsWindowVisible(user32Api, window)
+		return !(window.Title == "")
 	})
+	// remove minimized windows
 	windows = app.ParallelWindowFilter(windows, func(window app.WindowInfo) bool {
 		return !app.IsIconic(user32Api, window)
+	})
+	// remove invisible windows
+	windows = app.ParallelWindowFilter(windows, func(window app.WindowInfo) bool {
+		return app.IsWindowVisible(user32Api, window)
 	})
 
 	// Mirror windows on their respective monitors
@@ -52,10 +58,10 @@ func mirrorWindows(user32Api app.User32API, windows []app.WindowInfo) {
 		newRect := calculateMirroredPosition(window)
 
 		// Move window
-		user32Api.MoveWindows(window, 
-			newRect.Left, 
-			newRect.Top, 
-			newRect.Right-newRect.Left, 
+		user32Api.MoveWindows(window,
+			newRect.Left,
+			newRect.Top,
+			newRect.Right-newRect.Left,
 			newRect.Bottom-newRect.Top)
 	}
 }
