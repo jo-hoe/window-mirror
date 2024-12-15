@@ -1,1 +1,3 @@
-# window-mirror
+# window mirror
+
+mirrors windows horizontally

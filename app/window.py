@@ -72,10 +72,10 @@ def move_window(window_handle: int, left: int, top: int, width: int, height: int
     # Move window
     win32gui.SetWindowPos(
         window_handle,
-        win32con.HWND_TOP,
+        win32con.HWND_NOTOPMOST,
         left,
         top,
         width,
         height,
-        win32con.SWP_SHOWWINDOW
+        win32con.SWP_NOACTIVATE | win32con.SWP_NOZORDER
     )
