@@ -1,6 +1,6 @@
 from app.monitor import get_window_monitor_info
 from app.virtual_desktop import is_window_on_current_desktop
-from app.window import Window, get_window_rectangle, is_iconic, is_visible, is_window_pinned, move_window, pin_window
+from app.window import Window, get_window_rectangle, is_iconic, is_visible, move_window
 
 
 class WindowMirror:
