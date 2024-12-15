@@ -1,0 +1,65 @@
+import win32gui
+
+
+class Window:
+
+    def __init__(self, window_handle: int, window_title: str):
+        self._window_handle = window_handle
+        self._window_title = window_title
+
+    @property
+    def window_handle(self) -> int:
+        return self._window_handle
+
+    @property
+    def window_title(self) -> str:
+        return self._window_title
+
+    def __repr__(self):
+        return f"Window(handle={self.window_handle}, title={self.window_title})"
+
+    @staticmethod
+    def get_all_windows() -> list["Window"]:  # Use string literal here
+        """
+        Get list of window handles on the current virtual desktop.
+
+        Returns:
+            List[int]: List of window handles
+        """
+        visible_windows = []
+
+        def enum_windows_callback(window_handle, _):
+            visible_windows.append(window_handle)
+            return True
+        win32gui.EnumWindows(enum_windows_callback, None)
+
+        windows = []
+        for handle in visible_windows:
+            title = Window.get_window_title(handle)
+            windows.append(Window(handle, title))
+        return windows
+
+    @staticmethod
+    def is_iconic(window_handle: int) -> bool:
+        return win32gui.IsIconic(window_handle)
+
+    @staticmethod
+    def is_visible(window_handle: int) -> bool:
+        return win32gui.IsWindowVisible(window_handle)
+
+    @staticmethod
+    def get_window_title(window_handle: int) -> str:
+        return win32gui.GetWindowText(window_handle)
+
+    @staticmethod
+    def get_window_info(window_handle: int) -> tuple[int, int, int, int]:
+        """
+        Get the window information.
+
+        Args:
+            window_handle (int): Window handle
+
+        Returns:
+            Tuple[int, int, int, int]: (left, top, right, bottom) window coordinates
+        """
+        return win32gui.GetWindowRect(window_handle)
