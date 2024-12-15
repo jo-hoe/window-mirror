@@ -1,6 +1,6 @@
-from app.monitor import MonitorManager
-from app.virtual_desktop import VirtualDesktopManager
-from app.window import Window
+from app.monitor import get_window_monitor_info
+from app.virtual_desktop import is_window_on_current_desktop
+from app.window import Window, get_window_rectangle, is_iconic, is_visible, is_window_pinned, move_window, pin_window
 
 
 class WindowMirror:
@@ -12,11 +12,11 @@ class WindowMirror:
         for window in windows:
             if window.window_title == "":
                 continue
-            if Window.is_iconic(window.window_handle):
+            if is_iconic(window.window_handle):
                 continue
-            if not Window.is_visible(window.window_handle):
+            if not is_visible(window.window_handle):
                 continue
-            if not VirtualDesktopManager.is_window_on_current_desktop(window.window_handle):
+            if not is_window_on_current_desktop(window.window_handle):
                 continue
 
             result.append(window)
@@ -32,11 +32,11 @@ class WindowMirror:
             window_handle (int): Window handle
         """
         # Get current window rectangle
-        left, top, right, bottom = Window.get_window_rectangle(window_handle)
+        left, top, right, bottom = get_window_rectangle(window_handle)
 
         # Get monitor info
         monitor_left, monitor_top, monitor_right, monitor_bottom = \
-            MonitorManager.get_window_monitor_info(window_handle)
+            get_window_monitor_info(window_handle)
 
         # Calculate new position
         width = right - left
@@ -44,4 +44,4 @@ class WindowMirror:
         new_left = monitor_right - (left - monitor_left) - width
         new_top = top
 
-        Window.move_window(window_handle, new_left, new_top, width, height)
+        move_window(window_handle, new_left, new_top, width, height)

@@ -1,9 +1,9 @@
-from app.window import Window
+from app.window import Window, get_all_windows
 from app.window_mirror import WindowMirror
 
 
 if __name__ == '__main__':
-    windows = Window.get_all_windows()
+    windows = get_all_windows()
     windows = WindowMirror.filter_windows(windows)
 
     for window in windows:
