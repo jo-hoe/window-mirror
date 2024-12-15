@@ -55,15 +55,6 @@ def get_window_title(window_handle: int) -> str:
     return win32gui.GetWindowText(window_handle)
 
 
-def is_window_pinned(window_handle: int) -> bool:
-    app_view = get_app_view_for_window(window_handle)
-    return app_view.is_pinned()
-
-def pin_window(window_handle: int) -> None:
-    app_view = get_app_view_for_window(window_handle)
-    return app_view.pin()
-
-
 def get_window_rectangle(window_handle: int) -> tuple[int, int, int, int]:
     """
     Get the window rectangle.
