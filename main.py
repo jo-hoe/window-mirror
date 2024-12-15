@@ -7,4 +7,4 @@ if __name__ == '__main__':
     windows = WindowMirror.filter_windows(windows)
 
     for window in windows:
-        WindowMirror.mirror_window(window)
+        WindowMirror.mirror_window(window.window_handle)
