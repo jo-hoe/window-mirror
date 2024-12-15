@@ -1,6 +1,3 @@
-import win32gui
-import win32con
-
 from app.monitor import MonitorManager
 from app.virtual_desktop import VirtualDesktopManager
 from app.window import Window
