@@ -61,7 +61,7 @@ class Window:
             window_handle (int): Window handle
 
         Returns:
-            Tuple[int, int, int, int]: (left, top, right, bottom) window coordinates
+            tuple[int, int, int, int]: (left, top, right, bottom) window coordinates
         """
         return win32gui.GetWindowRect(window_handle)
 

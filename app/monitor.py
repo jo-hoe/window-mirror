@@ -13,7 +13,7 @@ class MonitorManager:
             window_handle (int): Window handle
 
         Returns:
-            Tuple[int, int, int, int]: (left, top, right, bottom) monitor coordinates
+            tuple[int, int, int, int]: (left, top, right, bottom) monitor coordinates
         """
         monitor = win32api.MonitorFromWindow(
             window_handle, win32con.MONITOR_DEFAULTTONEAREST)
