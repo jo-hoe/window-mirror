@@ -1,4 +1,5 @@
 import win32gui
+import win32con
 
 
 class Window:
@@ -52,9 +53,9 @@ class Window:
         return win32gui.GetWindowText(window_handle)
 
     @staticmethod
-    def get_window_info(window_handle: int) -> tuple[int, int, int, int]:
+    def get_window_rectangle(window_handle: int) -> tuple[int, int, int, int]:
         """
-        Get the window information.
+        Get the window rectangle.
 
         Args:
             window_handle (int): Window handle
@@ -63,3 +64,16 @@ class Window:
             Tuple[int, int, int, int]: (left, top, right, bottom) window coordinates
         """
         return win32gui.GetWindowRect(window_handle)
+
+    @staticmethod
+    def move_window(window_handle: int, left: int, top: int, width: int, height: int) -> None:
+        # Move window
+        win32gui.SetWindowPos(
+            window_handle,
+            win32con.HWND_TOP,
+            left,
+            top,
+            width,
+            height,
+            win32con.SWP_SHOWWINDOW
+        )

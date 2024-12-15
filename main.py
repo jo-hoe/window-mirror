@@ -35,7 +35,7 @@ class WindowMirror:
             window_handle (int): Window handle
         """
         # Get current window rectangle
-        left, top, right, bottom = win32gui.GetWindowRect(window_handle)
+        left, top, right, bottom = Window.get_window_rectangle(window_handle)
 
         # Get monitor info
         monitor_left, monitor_top, monitor_right, monitor_bottom = \
@@ -47,16 +47,7 @@ class WindowMirror:
         new_left = monitor_right - (left - monitor_left) - width
         new_top = top
 
-        # Move window
-        win32gui.SetWindowPos(
-            window_handle,
-            win32con.HWND_TOP,
-            new_left,
-            new_top,
-            width,
-            height,
-            win32con.SWP_SHOWWINDOW
-        )
+        Window.move_window(window_handle, new_left, new_top, width, height)
 
 
 if __name__ == '__main__':
