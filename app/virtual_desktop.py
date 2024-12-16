@@ -1,5 +1,3 @@
-from pyvda import get_apps_by_z_order
-
 from app.appview import get_app_view_for_window
 
 

@@ -1,4 +1,4 @@
-from app.window import Window, get_all_windows
+from app.window import get_all_windows
 from app.window_mirror import WindowMirror
 
 

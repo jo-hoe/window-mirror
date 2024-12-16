@@ -35,7 +35,7 @@ class WindowMirror:
         left, top, right, bottom = get_window_rectangle(window_handle)
 
         # Get monitor info
-        monitor_left, monitor_top, monitor_right, monitor_bottom = \
+        monitor_left, _, monitor_right, _ = \
             get_window_monitor_info(window_handle)
 
         # Calculate new position
