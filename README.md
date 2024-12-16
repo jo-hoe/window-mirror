@@ -33,7 +33,7 @@ pip install installer
 and running
 
 ```PowerShell
-pyinstaller -F main.py
+pyinstaller --noconsole --onefile main.py --name window-mirror.exe
 ```
 
 The `.exe` can then be found in the newly created `dist` folder.
