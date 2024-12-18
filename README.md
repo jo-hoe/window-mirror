@@ -59,12 +59,3 @@ You can check all `make` commands by running.
 ```bash
 make help
 ```
-
-## How To Run Locally
-
-For local development and testing, put a [`config.yaml`](#configuration) in folder `dev`.
-To run the service locally, you can use `docker-compose` or just run it via make:
-
-```bash
-make start
-```
