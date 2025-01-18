@@ -37,6 +37,14 @@ pyinstaller --noconsole --onefile main.py --name window-mirror.exe
 ```
 
 The `.exe` can then be found in the newly created `dist` folder.
+This command creates a single executable.
+The performance of that executable may not meet your requirements since all included libs need to be unpacked before the `.exe` file can be run.
+Consider to use the `--onedir` argument instead.
+The resulting `.exe` file will come with a `_internal` directory, but will be faster as all libs are already unpacked.
+
+```PowerShell
+pyinstaller --noconsole --onedir main.py --name window-mirror.exe
+```
 
 ## Run with "make"
 
